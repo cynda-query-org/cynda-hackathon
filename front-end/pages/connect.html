@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/logos/cynda.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Connect your data — Cynda</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=DM+Sans:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0F1117;
+      --surface: #181C27;
+      --surface2: #1E2333;
+      --ember: #F25C1E;
+      --glow: #FF7A3C;
+      --text: #E8E8E4;
+      --muted: #6E7484;
+      --border: #252A38;
+      --error: #E05252;
+    }
+
+    html, body { height: 100%; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      height: 56px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .nav-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ember);
+      letter-spacing: -0.5px;
+      text-decoration: none;
+    }
+
+    .nav-user {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-email {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .btn-logout {
+      font-size: 13px;
+      color: var(--muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: color 0.2s;
+    }
+
+    .btn-logout:hover { color: var(--text); }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 64px 24px;
+    }
+
+    .heading {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .heading h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .heading p {
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.15s;
+    }
+
+    .card:hover { border-color: var(--ember); transform: translateY(-2px); }
+
+    .card-icon {
+      font-size: 32px;
+      line-height: 1;
+    }
+
+    .card-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .card-desc {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 8px;
+      border-radius: 20px;
+      align-self: flex-start;
+    }
+
+    .badge-ready { background: rgba(242,92,30,0.15); color: var(--ember); }
+    .badge-soon  { background: rgba(110,116,132,0.15); color: var(--muted); }
+
+    /* Postgres form (hidden by default) */
+    .pg-form {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .pg-form.visible { display: flex; }
+
+    input {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      padding: 10px 14px;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+
+    input:focus { border-color: var(--ember); }
+    input::placeholder { color: var(--muted); }
+
+    .btn-primary {
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background: var(--ember);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-primary:hover { background: var(--glow); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .error-msg {
+      color: var(--error);
+      font-size: 13px;
+      display: none;
+    }
+
+    .error-msg.visible { display: block; }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <a href="/" class="nav-logo">cynda</a>
+    <div class="nav-user">
+      <span class="nav-email" id="nav-email"></span>
+      <a href="/pages/settings.html" class="btn-logout" style="text-decoration:none">Settings</a>
+      <button class="btn-logout" onclick="logout()">Sign out</button>
+    </div>
+  </nav>
+
+  <main>
+    <div class="heading">
+      <h1>Connect your data</h1>
+      <p>Choose a data source to start querying in plain English.</p>
+    </div>
+
+    <div class="cards">
+      <!-- Mock data -->
+      <div class="card" onclick="connectMock()">
+        <div class="card-icon">🎯</div>
+        <div class="card-title">Try with sample data</div>
+        <div class="card-desc">
+          Explore Cynda instantly with a real Brazilian e-commerce dataset —
+          100k+ orders, customers, products, and reviews. No setup needed.
+        </div>
+        <span class="badge badge-ready">Ready to use</span>
+      </div>
+
+      <!-- BigQuery -->
+      <div class="card" onclick="connectBigQuery()">
+        <div class="card-icon"><img src="/logos/bigquery.svg" width="32" height="32" alt="BigQuery" style="display:block"></div>
+        <div class="card-title">Google BigQuery</div>
+        <div class="card-desc">
+          Connect your BigQuery project. You'll authorize Cynda to read your
+          data via your Google account — read-only, no writes.
+        </div>
+        <span class="badge badge-soon">Coming soon</span>
+      </div>
+
+      <!-- PostgreSQL -->
+      <div class="card" id="card-pg" onclick="togglePgForm()">
+        <div class="card-icon"><img src="/logos/postgresql.png" width="32" height="32" alt="PostgreSQL"></div>
+        <div class="card-title">PostgreSQL</div>
+        <div class="card-desc">
+          Connect any PostgreSQL database with a connection string. Cynda
+          will generate and run SELECT queries on your behalf.
+        </div>
+        <span class="badge badge-ready">Beta</span>
+
+        <div class="pg-form" id="pg-form" onclick="event.stopPropagation()">
+          <input id="pg-name"     type="text"     placeholder="Connection name (e.g. Prod DB)" />
+          <input id="pg-host"     type="text"     placeholder="Host (e.g. db.example.com)" />
+          <div style="display:grid;grid-template-columns:1fr 88px;gap:8px">
+            <input id="pg-database" type="text"   placeholder="Database name" />
+            <input id="pg-port"     type="text"   placeholder="Port" value="5432" />
+          </div>
+          <input id="pg-username"  type="text"     placeholder="Username" autocomplete="off" />
+          <input id="pg-password"  type="password" placeholder="Password" autocomplete="new-password" />
+          <button class="btn-primary" id="btn-pg" onclick="submitPostgres()">Connect</button>
+          <p class="error-msg" id="pg-error"></p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // connect.html is now managed from the dashboard
+    window.location.replace('/pages/dashboard.html');
+    const BACKEND_URL = '__BACKEND_URL__';
+
+    function authHeaders() {
+      const token = localStorage.getItem('cynda_token');
+      return token ? { Authorization: `Bearer ${token}` } : {};
+    }
+
+    async function requireAuth() {
+      try {
+        const res = await fetch(`${BACKEND_URL}/auth/me`, {
+          credentials: 'include',
+          headers: authHeaders(),
+        });
+        if (!res.ok) { window.location.href = '/pages/login.html'; return null; }
+        return await res.json();
+      } catch {
+        window.location.href = '/pages/login.html';
+        return null;
+      }
+    }
+
+    async function logout() {
+      await fetch(`${BACKEND_URL}/auth/logout`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: authHeaders(),
+      });
+      localStorage.removeItem('cynda_token');
+      window.location.href = '/pages/login.html';
+    }
+
+    async function connectMock() {
+      const res = await fetch(`${BACKEND_URL}/connections`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...authHeaders() },
+        credentials: 'include',
+        body: JSON.stringify({ db_type: 'mock', name: 'Sample data' }),
+      });
+
+      if (res.ok) {
+        const conn = await res.json();
+        window.location.href = `/pages/demo.html?connection_id=${conn.id}`;
+      }
+    }
+
+    function connectBigQuery() {
+      // Coming soon — placeholder
+    }
+
+    function togglePgForm() {
+      document.getElementById('pg-form').classList.toggle('visible');
+    }
+
+    async function submitPostgres() {
+      const name     = document.getElementById('pg-name').value.trim();
+      const host     = document.getElementById('pg-host').value.trim();
+      const port     = document.getElementById('pg-port').value.trim() || '5432';
+      const database = document.getElementById('pg-database').value.trim();
+      const username = document.getElementById('pg-username').value.trim();
+      const password = document.getElementById('pg-password').value;
+      const errEl    = document.getElementById('pg-error');
+      const btn      = document.getElementById('btn-pg');
+
+      errEl.classList.remove('visible');
+
+      if (!name || !host || !database || !username) {
+        errEl.textContent = 'Name, host, database, and username are required.';
+        errEl.classList.add('visible');
+        return;
+      }
+
+      const encodedUser = encodeURIComponent(username);
+      const encodedPass = encodeURIComponent(password);
+      const encodedDb   = encodeURIComponent(database);
+      const url = `postgresql://${encodedUser}:${encodedPass}@${host}:${port}/${encodedDb}`;
+
+      btn.disabled = true;
+      btn.textContent = 'Connecting…';
+
+      try {
+        const res = await fetch(`${BACKEND_URL}/connections`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', ...authHeaders() },
+          credentials: 'include',
+          body: JSON.stringify({ db_type: 'postgres', name, credentials: { url } }),
+        });
+
+        if (res.ok) {
+          const conn = await res.json();
+          window.location.href = `/pages/demo.html?connection_id=${conn.id}`;
+          return;
+        }
+
+        const data = await res.json();
+        errEl.textContent = data.detail || 'Connection failed.';
+        errEl.classList.add('visible');
+      } catch {
+        errEl.textContent = 'Network error. Please try again.';
+        errEl.classList.add('visible');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Connect';
+      }
+    }
+
+    // Boot
+    (async () => {
+      const user = await requireAuth();
+      if (user) document.getElementById('nav-email').textContent = user.email;
+    })();
+  </script>
+</body>
+
+</html>

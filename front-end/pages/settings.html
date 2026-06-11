@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/logos/cynda.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account settings — Cynda</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=DM+Sans:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0F1117;
+      --surface: #181C27;
+      --surface2: #1E2333;
+      --ember: #F25C1E;
+      --glow: #FF7A3C;
+      --text: #E8E8E4;
+      --muted: #6E7484;
+      --border: #252A38;
+      --error: #E05252;
+    }
+
+    html, body { height: 100%; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      height: 56px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .nav-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ember);
+      letter-spacing: -0.5px;
+      text-decoration: none;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .nav-email { font-size: 13px; color: var(--muted); }
+
+    .btn-text {
+      font-size: 13px;
+      color: var(--muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: color 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .btn-text:hover { color: var(--text); }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 24px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 28px;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 32px 0;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    label {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    input {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      padding: 12px 16px;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+
+    input:focus { border-color: var(--ember); }
+    input::placeholder { color: var(--muted); }
+    input:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .btn-primary {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      background: var(--ember);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      margin-top: 8px;
+    }
+    .btn-primary:hover { background: var(--glow); }
+    .btn-primary:active { transform: scale(0.98); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .error-msg {
+      color: var(--error);
+      font-size: 13px;
+      margin-top: 12px;
+      display: none;
+    }
+    .error-msg.visible { display: block; }
+
+    .success-msg {
+      color: #5cb85c;
+      font-size: 13px;
+      margin-top: 12px;
+      display: none;
+    }
+    .success-msg.visible { display: block; }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <a href="/pages/dashboard.html" class="nav-logo">cynda</a>
+    <div class="nav-right">
+      <span class="nav-email" id="nav-email"></span>
+      <button class="btn-text" onclick="logout()">Sign out</button>
+    </div>
+  </nav>
+
+  <main>
+    <div class="card">
+      <h2>Account settings</h2>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input id="account-email" type="email" disabled />
+      </div>
+
+      <div class="divider"></div>
+
+      <h2>Change password</h2>
+      <div class="form-group">
+        <label for="current-password">Current password</label>
+        <input id="current-password" type="password" placeholder="••••••••" autocomplete="current-password" />
+      </div>
+      <div class="form-group">
+        <label for="new-password">New password</label>
+        <input id="new-password" type="password" placeholder="Min. 8 characters" autocomplete="new-password" />
+      </div>
+      <div class="form-group">
+        <label for="confirm-password">Confirm new password</label>
+        <input id="confirm-password" type="password" placeholder="Repeat new password" autocomplete="new-password" />
+      </div>
+      <button class="btn-primary" id="btn-change" onclick="submitChangePassword()">Update password</button>
+      <p class="error-msg" id="change-error"></p>
+      <p class="success-msg" id="change-success">Password updated successfully.</p>
+    </div>
+  </main>
+
+  <script>
+    const BACKEND_URL = '__BACKEND_URL__';
+
+    function authHeaders() {
+      const token = localStorage.getItem('cynda_token');
+      return token ? { Authorization: `Bearer ${token}` } : {};
+    }
+
+    async function requireAuth() {
+      try {
+        const res = await fetch(`${BACKEND_URL}/auth/me`, {
+          credentials: 'include',
+          headers: authHeaders(),
+        });
+        if (!res.ok) { window.location.href = '/pages/login.html'; return null; }
+        return await res.json();
+      } catch {
+        window.location.href = '/pages/login.html';
+        return null;
+      }
+    }
+
+    async function logout() {
+      await fetch(`${BACKEND_URL}/auth/logout`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: authHeaders(),
+      });
+      localStorage.removeItem('cynda_token');
+      window.location.href = '/pages/login.html';
+    }
+
+    async function submitChangePassword() {
+      const currentPassword = document.getElementById('current-password').value;
+      const newPassword = document.getElementById('new-password').value;
+      const confirm = document.getElementById('confirm-password').value;
+      const errEl = document.getElementById('change-error');
+      const successEl = document.getElementById('change-success');
+      const btn = document.getElementById('btn-change');
+
+      errEl.classList.remove('visible');
+      successEl.classList.remove('visible');
+
+      if (newPassword.length < 8) {
+        errEl.textContent = 'New password must be at least 8 characters.';
+        errEl.classList.add('visible');
+        return;
+      }
+      if (newPassword !== confirm) {
+        errEl.textContent = 'Passwords do not match.';
+        errEl.classList.add('visible');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Updating…';
+
+      try {
+        const res = await fetch(`${BACKEND_URL}/auth/change-password`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', ...authHeaders() },
+          credentials: 'include',
+          body: JSON.stringify({ current_password: currentPassword, new_password: newPassword }),
+        });
+
+        if (res.ok) {
+          document.getElementById('current-password').value = '';
+          document.getElementById('new-password').value = '';
+          document.getElementById('confirm-password').value = '';
+          successEl.classList.add('visible');
+          return;
+        }
+
+        const data = await res.json();
+        errEl.textContent = data.detail || 'Something went wrong. Please try again.';
+        errEl.classList.add('visible');
+      } catch {
+        errEl.textContent = 'Network error. Please try again.';
+        errEl.classList.add('visible');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Update password';
+      }
+    }
+
+    (async () => {
+      const user = await requireAuth();
+      if (!user) return;
+      document.getElementById('nav-email').textContent = user.email;
+      document.getElementById('account-email').value = user.email;
+    })();
+  </script>
+</body>
+
+</html>

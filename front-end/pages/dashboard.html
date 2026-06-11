@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/logos/cynda.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Cynda</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0F1117;
+      --surface: #181C27;
+      --surface2: #1E2333;
+      --ember: #F25C1E;
+      --glow: #FF7A3C;
+      --text: #E8E8E4;
+      --muted: #6E7484;
+      --border: #252A38;
+      --error: #E05252;
+      --success: #5cb85c;
+    }
+
+    html, body { height: 100%; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── Sidebar ── */
+
+    .sidebar {
+      width: 220px;
+      flex-shrink: 0;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 24px 16px;
+      background: var(--bg);
+    }
+
+    .sidebar-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ember);
+      letter-spacing: -0.5px;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 32px;
+      padding-left: 8px;
+    }
+
+    .nav-items { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      font-family: 'DM Sans', sans-serif;
+      text-align: left;
+      width: 100%;
+      transition: color 0.15s, background 0.15s;
+    }
+    .nav-item:hover { color: var(--text); background: var(--surface); }
+    .nav-item.active { color: var(--text); background: var(--surface2); }
+
+    .nav-icon { font-size: 16px; line-height: 1; }
+
+    .nav-icon img {
+      width: 16px;
+      height: 16px;
+      display: block;
+      filter: invert(1);
+      opacity: 0.45;
+      transition: opacity 0.15s;
+    }
+    .nav-item:hover .nav-icon img,
+    .nav-item.active .nav-icon img { opacity: 1; }
+
+    .sidebar-footer {
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+    }
+
+    .sidebar-email { font-size: 12px; color: var(--muted); padding: 0 12px; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .btn-signout {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      color: var(--muted);
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      font-family: 'DM Sans', sans-serif;
+      width: 100%;
+      transition: color 0.15s;
+    }
+    .btn-signout:hover { color: var(--error); }
+
+    /* ── Content area ── */
+
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 48px 56px;
+    }
+
+    /* Panels */
+    .panel { display: none; max-width: 680px; }
+    .panel.active { display: block; }
+
+    .panel-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .panel-sub { font-size: 14px; color: var(--muted); margin-bottom: 32px; }
+
+    /* ── Connection cards ── */
+
+    .conn-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+
+    .conn-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      transition: border-color 0.2s;
+    }
+    .conn-card:hover { border-color: #3a4055; }
+
+    .conn-left { display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0; }
+
+    .conn-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+      background: var(--surface2);
+    }
+
+    .conn-info { min-width: 0; }
+
+    .conn-name {
+      font-weight: 500;
+      font-size: 15px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .conn-meta { font-size: 12px; color: var(--muted); margin-top: 3px; }
+
+    .conn-badge {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 2px 7px;
+      border-radius: 5px;
+      flex-shrink: 0;
+    }
+    .badge-mock     { background: rgba(242,92,30,0.15); color: var(--ember); }
+    .badge-postgres { background: rgba(74,144,217,0.15); color: #4A90D9; }
+    .badge-bigquery { background: rgba(66,133,244,0.15); color: #4285F4; }
+
+    .conn-actions { display: flex; gap: 10px; flex-shrink: 0; }
+
+    .btn-primary-sm {
+      padding: 8px 18px;
+      border: none;
+      border-radius: 8px;
+      background: var(--ember);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .btn-primary-sm:hover { background: var(--glow); }
+    .btn-primary-sm:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .btn-outline-sm {
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-outline-sm:hover { border-color: var(--error); color: var(--error); }
+
+    /* Add connection area */
+
+    .add-section { border-top: 1px solid var(--border); padding-top: 24px; }
+
+    .add-section-title {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+    }
+
+    .add-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px;
+    }
+
+    .add-card {
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      padding: 18px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .add-card:hover { border-color: var(--ember); background: var(--surface2); }
+    .add-card.disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+    .add-card.hidden { display: none; }
+
+    .add-card-icon { font-size: 22px; margin-bottom: 8px; }
+    .add-card-title { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+    .add-card-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+    .badge-beta {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 10px;
+      background: rgba(74,144,217,0.15);
+      color: #4A90D9;
+      padding: 2px 7px;
+      border-radius: 5px;
+    }
+
+    /* Postgres inline form */
+    .pg-form {
+      display: none;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+      flex-direction: column;
+      gap: 10px;
+    }
+    .pg-form.open { display: flex; }
+
+    .pg-form input, input[type="text"], input[type="email"], input[type="password"] {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      padding: 10px 14px;
+      outline: none;
+      width: 100%;
+      transition: border-color 0.2s;
+    }
+    .pg-form input:focus, input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus {
+      border-color: var(--ember);
+    }
+    .pg-form input::placeholder, input::placeholder { color: var(--muted); }
+    input:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    .error-msg { color: var(--error); font-size: 13px; display: none; }
+    .error-msg.visible { display: block; }
+
+    /* ── Profile panel ── */
+
+    .profile-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 32px;
+    }
+
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
+    label { font-size: 13px; color: var(--muted); font-weight: 500; }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .toggle-label { font-size: 14px; }
+    .toggle-sublabel { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    .toggle { position: relative; width: 44px; height: 24px; flex-shrink: 0; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: var(--border);
+      border-radius: 24px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      left: 3px;
+      top: 3px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.2s;
+    }
+    .toggle input:checked + .toggle-slider { background: var(--ember); }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(20px); }
+
+    .btn-primary {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 10px;
+      background: var(--ember);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-primary:hover { background: var(--glow); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .profile-footer {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .link-muted {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: underline;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .link-muted:hover { color: var(--text); }
+
+    .feedback-msg { font-size: 13px; margin-left: 16px; display: none; }
+    .feedback-msg.ok { color: var(--success); display: inline; }
+    .feedback-msg.err { color: var(--error); display: inline; }
+
+    /* ── Refer panel ── */
+
+    .refer-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 32px;
+      margin-bottom: 16px;
+    }
+
+    .refer-desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .refer-link-row {
+      display: flex;
+      gap: 10px;
+      align-items: stretch;
+      margin-bottom: 16px;
+    }
+
+    .refer-link-input {
+      flex: 1;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      padding: 10px 14px;
+      outline: none;
+      min-width: 0;
+    }
+
+    .refer-stat {
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .refer-stat strong { color: var(--ember); }
+
+    .hidden { display: none !important; }
+
+    .btn-slack {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: transparent;
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      white-space: nowrap;
+      min-width: 136px;
+      justify-content: center;
+    }
+    .btn-slack:hover { border-color: #4A154B; background: #4A154B; }
+    .btn-slack.connected { border-color: #4A154B; }
+    .btn-slack.connected:hover { background: #4A154B; }
+
+    /* ── Conversations list ── */
+    .conv-all-list { display: flex; flex-direction: column; gap: 8px; }
+    .conv-all-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .conv-all-row:hover { border-color: #3a4055; background: var(--surface2); }
+    .conv-all-icon { font-size: 16px; flex-shrink: 0; width: 32px; text-align: center; }
+    .conv-all-body { flex: 1; min-width: 0; }
+    .conv-all-title { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .conv-all-meta { font-size: 12px; color: var(--muted); margin-top: 3px; display: flex; align-items: center; gap: 6px; }
+
+    /* Workspace picker dropdown */
+    .slack-picker-wrap { position: relative; display: inline-block; }
+    .slack-picker {
+      display: none;
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      min-width: 220px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 6px;
+      z-index: 100;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    .slack-picker.open { display: block; }
+    .slack-picker-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border-radius: 7px;
+      font-size: 13px;
+      cursor: pointer;
+      color: var(--text);
+      transition: background 0.15s;
+    }
+    .slack-picker-item:hover { background: var(--surface); }
+    .slack-picker-divider { border: none; border-top: 1px solid var(--border); margin: 4px 0; }
+    .slack-picker-install {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border-radius: 7px;
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+    }
+    .slack-picker-install:hover { background: var(--surface); color: var(--text); }
+
+    /* Postgres two-column row */
+    .pg-form-row {
+      display: grid;
+      grid-template-columns: 1fr 88px;
+      gap: 8px;
+    }
+
+    /* BigQuery auth mode tabs */
+    .auth-mode-tabs {
+      display: flex;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .auth-mode-tab {
+      flex: 1;
+      padding: 7px 10px;
+      font-size: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .auth-mode-tab.active { background: var(--surface2); color: var(--text); }
+
+    /* BigQuery SA JSON textarea */
+    .bq-sa-json {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: monospace;
+      font-size: 12px;
+      padding: 10px 14px;
+      outline: none;
+      width: 100%;
+      resize: vertical;
+      min-height: 80px;
+      transition: border-color 0.2s;
+    }
+    .bq-sa-json:focus { border-color: var(--ember); }
+    .bq-sa-json::placeholder { color: var(--muted); font-family: 'DM Sans', sans-serif; }
+
+    /* ── Business context per connection ── */
+    .conn-ctx-row {
+      flex: 0 0 100%;
+      margin-top: 2px;
+    }
+
+    .ctx-text {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+      cursor: pointer;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .ctx-text:hover { color: var(--text); }
+
+    .ctx-edit-hint {
+      font-size: 11px;
+      color: var(--ember);
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+    .ctx-text:hover .ctx-edit-hint { opacity: 1; }
+
+    .ctx-empty {
+      font-size: 12px;
+      color: var(--muted);
+      cursor: pointer;
+      opacity: 0.6;
+      transition: opacity 0.15s;
+    }
+    .ctx-empty:hover { opacity: 1; color: var(--ember); }
+
+    .ctx-textarea, textarea {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      padding: 10px 14px;
+      outline: none;
+      width: 100%;
+      resize: vertical;
+      min-height: 72px;
+      transition: border-color 0.2s;
+      line-height: 1.5;
+    }
+    .ctx-textarea:focus, textarea:focus { border-color: var(--ember); }
+    .ctx-textarea::placeholder, textarea::placeholder { color: var(--muted); }
+
+    .ctx-btn-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    /* Google connect button */
+    .btn-google {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface2);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      width: 100%;
+    }
+    .btn-google:hover { border-color: var(--ember); background: var(--surface); }
+    .btn-google:disabled { opacity: 0.5; cursor: not-allowed; }
+  </style>
+</head>
+
+<body>
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar">
+    <a href="/pages/dashboard.html" class="sidebar-logo">cynda</a>
+
+    <nav class="nav-items">
+      <button class="nav-item" data-panel="conversations" onclick="showPanel('conversations')">
+        <span class="nav-icon"><img src="/logos/msg_icon.png" alt=""></span> Conversations
+      </button>
+      <button class="nav-item active" data-panel="connections" onclick="showPanel('connections')">
+        <span class="nav-icon"><img src="/logos/connections_icon.png" alt=""></span> Connections
+      </button>
+      <button class="nav-item" data-panel="profile" onclick="showPanel('profile')">
+        <span class="nav-icon"><img src="/logos/profile_icon.png" alt=""></span> Profile
+      </button>
+      <button class="nav-item" data-panel="refer" onclick="showPanel('refer')">
+        <span class="nav-icon"><img src="/logos/refer_icon.png" alt=""></span> Refer a Friend
+      </button>
+      <button class="nav-item" data-panel="settings" onclick="showPanel('settings')">
+        <span class="nav-icon"><img src="/logos/settings_icon.png" alt=""></span> Settings
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-email" id="nav-email"></div>
+      <button class="btn-signout" onclick="logout()">
+        <span>↩</span> Sign out
+      </button>
+    </div>
+  </aside>
+
+  <!-- ── Content area ── -->
+  <main class="content">
+
+    <!-- Connections panel -->
+    <div class="panel active" id="panel-connections">
+      <div class="panel-title">Connections</div>
+      <div class="panel-sub">Your connected data sources. Pick one to start chatting.</div>
+
+      <div class="conn-list" id="conn-list"></div>
+
+      <div class="add-section">
+        <div class="add-section-title">Add a source</div>
+        <div class="add-cards">
+
+          <div class="add-card" id="card-mock" onclick="connectMock()">
+            <div class="add-card-icon">🎯</div>
+            <div class="add-card-title">Sample data</div>
+            <div class="add-card-desc">Real Brazilian e-commerce dataset. No setup needed.</div>
+          </div>
+
+          <div class="add-card" id="card-pg" onclick="togglePgForm()">
+            <div class="add-card-icon"><img src="/logos/postgresql.png" width="26" height="26" alt="PostgreSQL" style="display:block"></div>
+            <div class="add-card-title">PostgreSQL</div>
+            <div class="add-card-desc">Connect any PostgreSQL database.</div>
+            <span class="badge-beta">Beta</span>
+            <div class="pg-form" id="pg-form" onclick="event.stopPropagation()">
+              <input id="pg-name"     type="text"     placeholder="Connection name (e.g. Prod DB)" />
+              <input id="pg-host"     type="text"     placeholder="Host (e.g. db.example.com)" />
+              <div class="pg-form-row">
+                <input id="pg-database" type="text"   placeholder="Database name" />
+                <input id="pg-port"     type="text"   placeholder="Port" value="5432" />
+              </div>
+              <input id="pg-username"  type="text"     placeholder="Username" autocomplete="off" />
+              <input id="pg-password"  type="password" placeholder="Password" autocomplete="new-password" />
+              <textarea id="pg-context" placeholder="Business context (optional) — describe your company, sector, key metrics…" rows="3"></textarea>
+              <button class="btn-primary-sm" onclick="submitPostgres()">Connect</button>
+              <p class="error-msg" id="pg-error"></p>
+            </div>
+          </div>
+
+          <div class="add-card" id="card-bq" onclick="toggleBqForm()">
+            <div class="add-card-icon"><img src="/logos/bigquery.svg" width="26" height="26" alt="BigQuery" style="display:block"></div>
+            <div class="add-card-title">BigQuery</div>
+            <div class="add-card-desc">Connect your BigQuery project via service account or Google OAuth.</div>
+            <span class="badge-beta" style="background:rgba(66,133,244,0.15);color:#4285F4">Beta</span>
+
+            <div class="pg-form" id="bq-form" onclick="event.stopPropagation()">
+              <input id="bq-name" type="text" placeholder="Connection name (e.g. Analytics)" />
+              <input id="bq-project" type="text" placeholder="Billing project ID (e.g. my-gcp-project)" />
+              <input id="bq-data-project" type="text" placeholder="Data project ID (optional — defaults to billing project)" />
+
+              <div class="auth-mode-tabs">
+                <button class="auth-mode-tab active" id="tab-sa" onclick="setBqAuthMode('sa')">Service Account</button>
+                <button class="auth-mode-tab" id="tab-oauth" onclick="setBqAuthMode('oauth')">Google OAuth</button>
+              </div>
+
+              <div id="bq-sa-fields" style="display:flex;flex-direction:column;gap:10px">
+                <textarea id="bq-sa-json" class="bq-sa-json" placeholder="Paste service account JSON here…"></textarea>
+                <button class="btn-primary-sm" onclick="submitBigQuery('sa')">Connect</button>
+              </div>
+
+              <div id="bq-oauth-fields" style="display:none;flex-direction:column;gap:10px">
+                <p style="font-size:12px;color:var(--muted);line-height:1.5">Cynda will request read-only access to BigQuery on your behalf. A Google sign-in page will open.</p>
+                <button class="btn-google" id="btn-bq-oauth" onclick="submitBigQuery('oauth')">
+                  <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                  Continue with Google
+                </button>
+              </div>
+
+              <textarea id="bq-context" placeholder="Business context (optional) — describe your company, sector, key metrics…" rows="3"></textarea>
+              <p class="error-msg" id="bq-error"></p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile panel -->
+    <div class="panel" id="panel-profile">
+      <div class="panel-title">Profile</div>
+      <div class="panel-sub">Manage your account information.</div>
+
+      <div class="profile-card">
+        <div class="form-group">
+          <label for="account-name">Name</label>
+          <input id="account-name" type="text" placeholder="Your name" autocomplete="name" />
+        </div>
+        <div class="form-group">
+          <label for="account-email">Email</label>
+          <input id="account-email" type="email" disabled />
+        </div>
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">Product updates</div>
+            <div class="toggle-sublabel">Occasional emails about new features</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="newsletter-toggle" checked />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div style="display:flex;align-items:center">
+          <button class="btn-primary" id="btn-save" onclick="saveProfile()">Save changes</button>
+          <span class="feedback-msg" id="profile-feedback"></span>
+        </div>
+        <div class="profile-footer">
+          <button class="link-muted" onclick="window.location.href='/pages/settings.html'">Change password →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Conversations panel -->
+    <div class="panel" id="panel-conversations">
+      <div class="panel-title">All Conversations</div>
+      <div class="panel-sub">Your recent conversations across all connections.</div>
+      <div class="conv-all-list" id="conv-all-list">
+        <p style="color:var(--muted);font-size:14px">Loading…</p>
+      </div>
+    </div>
+
+    <!-- Settings panel -->
+    <div class="panel" id="panel-settings">
+      <div class="panel-title">Settings</div>
+      <div class="panel-sub">Customize your chat experience. Changes apply immediately to new responses.</div>
+
+      <div class="profile-card">
+        <div class="form-group">
+          <label for="setting-max-rows">Max table rows: <strong id="setting-max-rows-val">50</strong></label>
+          <input type="range" id="setting-max-rows" min="0" max="100" value="50"
+            style="width:100%;accent-color:var(--ember);margin-top:8px;cursor:pointer" />
+          <div style="font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5">
+            Maximum number of rows to display as a table in the chat. Queries returning more rows will be summarised in text instead.
+          </div>
+        </div>
+
+        <div class="toggle-row" style="margin-top:8px">
+          <div>
+            <div class="toggle-label">Collapsed SQL by default</div>
+            <div class="toggle-sublabel">SQL code blocks start collapsed in new responses</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="setting-sql-collapsed" />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">Collapsed table by default</div>
+            <div class="toggle-sublabel">Table blocks start collapsed in new responses</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="setting-table-collapsed" />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Refer a Friend panel -->
+    <div class="panel" id="panel-refer">
+      <div class="panel-title">Refer a Friend</div>
+      <div class="panel-sub">Share Cynda and help others query their data faster.</div>
+
+      <div class="refer-card">
+        <p class="refer-desc">
+          Share your unique link. Every person who signs up through it gets straight to the good stuff —
+          and you'll see how many people you've brought in.
+        </p>
+        <div class="refer-link-row">
+          <input class="refer-link-input" id="refer-link" readonly value="Loading…" />
+          <button class="btn-primary-sm" id="btn-copy" onclick="copyReferralLink()">Copy</button>
+        </div>
+        <p class="refer-stat" id="refer-stat">Loading…</p>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    const BACKEND_URL = '__BACKEND_URL__';
+
+    let slackEnabled = false;
+
+    function authHeaders() {
+      const token = localStorage.getItem('cynda_token');
+      return token ? { Authorization: `Bearer ${token}` } : {};
+    }
+
+    // ── Sidebar navigation ──
+
+    function showPanel(name) {
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.getElementById(`panel-${name}`).classList.add('active');
+      document.querySelector(`[data-panel="${name}"]`).classList.add('active');
+
+      if (name === 'refer') loadReferral();
+      if (name === 'conversations') loadAllConversations();
+      if (name === 'settings') loadSettings();
+    }
+
+    // ── Settings ──
+
+    let _settingsLoaded = false;
+
+    function loadSettings() {
+      if (_settingsLoaded) return;
+      _settingsLoaded = true;
+
+      const maxRows = parseInt(localStorage.getItem('cynda_max_table_rows') ?? '50', 10);
+      const sqlCollapsed = localStorage.getItem('cynda_sql_collapsed') !== 'false';
+      const tableCollapsed = localStorage.getItem('cynda_table_collapsed') !== 'false';
+
+      const slider = document.getElementById('setting-max-rows');
+      const sliderVal = document.getElementById('setting-max-rows-val');
+      slider.value = maxRows;
+      sliderVal.textContent = maxRows;
+      document.getElementById('setting-sql-collapsed').checked = sqlCollapsed;
+      document.getElementById('setting-table-collapsed').checked = tableCollapsed;
+
+      slider.addEventListener('input', () => {
+        sliderVal.textContent = slider.value;
+        localStorage.setItem('cynda_max_table_rows', slider.value);
+      });
+      document.getElementById('setting-sql-collapsed').addEventListener('change', (e) => {
+        localStorage.setItem('cynda_sql_collapsed', e.target.checked ? 'true' : 'false');
+      });
+      document.getElementById('setting-table-collapsed').addEventListener('change', (e) => {
+        localStorage.setItem('cynda_table_collapsed', e.target.checked ? 'true' : 'false');
+      });
+    }
+
+    // ── Auth ──
+
+    async function logout() {
+      await fetch(`${BACKEND_URL}/auth/logout`, { method: 'POST', credentials: 'include', headers: authHeaders() });
+      localStorage.removeItem('cynda_token');
+      window.location.href = '/pages/login.html';
+    }
+
+    // ── Connections ──
+
+    const ICONS = { mock: '🎯', postgres: '<img src="/logos/postgresql.png" width="24" height="24" alt="PostgreSQL" style="display:block">', bigquery: '<img src="/logos/bigquery.svg" width="24" height="24" alt="BigQuery" style="display:block">' };
+    const BADGE_CLASS = { mock: 'badge-mock', postgres: 'badge-postgres', bigquery: 'badge-bigquery' };
+    const BADGE_LABEL = { mock: 'Sample data', postgres: 'PostgreSQL', bigquery: 'BigQuery' };
+
+    function formatDate(iso) {
+      if (!iso) return '';
+      return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    function _escAttr(s) {
+      return (s || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function _contextDisplay(connId, context) {
+      if (context) {
+        const escaped = _escAttr(context);
+        const preview = context.length > 120 ? context.slice(0, 120) + '…' : context;
+        return `<span class="ctx-text" title="${escaped}" onclick="openContextEdit('${connId}')">${_escAttr(preview)} <span class="ctx-edit-hint">edit</span></span>`;
+      }
+      return `<span class="ctx-empty" onclick="openContextEdit('${connId}')">+ Add business context</span>`;
+    }
+
+    function renderConnections(conns) {
+      const list = document.getElementById('conn-list');
+      list.innerHTML = conns.map(c => `
+        <div class="conn-card" id="conn-${c.id}">
+          <div class="conn-left">
+            <div class="conn-icon">${ICONS[c.db_type] || '🗄️'}</div>
+            <div class="conn-info">
+              <div class="conn-name">
+                <span class="conn-badge ${BADGE_CLASS[c.db_type] || ''}">${BADGE_LABEL[c.db_type] || c.db_type}</span>
+                ${c.name}
+              </div>
+              ${c.created_at ? `<div class="conn-meta">Added ${formatDate(c.created_at)}</div>` : ''}
+            </div>
+          </div>
+          <div class="conn-actions">
+            <button class="btn-primary-sm" onclick="openChat('${c.id}')">Open chat</button>
+            ${slackEnabled ? `<div class="slack-picker-wrap" id="slack-wrap-${c.id}">
+              <button class="btn-slack" id="slack-btn-${c.id}" onclick="onSlackBtnClick(event, '${c.id}')">
+                <img id="slack-icon-${c.id}" src="/logos/slack.png" width="14" height="14" style="flex-shrink:0;display:block;filter:grayscale(1);opacity:0.7">
+                <span id="slack-btn-label-${c.id}">Add to Slack</span>
+              </button>
+              <div class="slack-picker" id="slack-picker-${c.id}"></div>
+            </div>` : ''}
+            <button class="btn-outline-sm" onclick="removeConn('${c.id}', '${c.name}')">Remove</button>
+          </div>
+          <div class="conn-ctx-row" id="conn-ctx-${c.id}" data-context="${_escAttr(c.org_context)}">
+            ${_contextDisplay(c.id, c.org_context)}
+          </div>
+        </div>
+      `).join('');
+
+      if (conns.some(c => c.db_type === 'mock')) {
+        document.getElementById('card-mock').classList.add('hidden');
+      } else {
+        document.getElementById('card-mock').classList.remove('hidden');
+      }
+    }
+
+    function openChat(connectionId) {
+      window.location.href = `/pages/demo.html?connection_id=${connectionId}`;
+    }
+
+    async function removeConn(id, name) {
+      if (!confirm(`Remove connection "${name}"?`)) return;
+      const res = await fetch(`${BACKEND_URL}/connections/${id}`, {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: authHeaders(),
+      });
+      if (res.ok) {
+        document.getElementById(`conn-${id}`)?.remove();
+        const remaining = document.querySelectorAll('.conn-card');
+        if (!remaining.length) document.getElementById('card-mock').classList.remove('hidden');
+      }
+    }
+
+    function openContextEdit(connId) {
+      const section = document.getElementById(`conn-ctx-${connId}`);
+      const current = section.dataset.context || '';
+      section.innerHTML = `
+        <textarea class="ctx-textarea" id="ctx-input-${connId}" placeholder="Describe your company: sector, key metrics, terminology…" rows="3">${_escAttr(current)}</textarea>
+        <div class="ctx-btn-row">
+          <button class="btn-primary-sm" onclick="saveContext('${connId}')">Save</button>
+          <button class="btn-outline-sm" style="border-color:var(--border);color:var(--muted)" onclick="cancelContextEdit('${connId}')">Cancel</button>
+        </div>
+      `;
+      document.getElementById(`ctx-input-${connId}`).focus();
+    }
+
+    function cancelContextEdit(connId) {
+      const section = document.getElementById(`conn-ctx-${connId}`);
+      const current = section.dataset.context || '';
+      section.innerHTML = _contextDisplay(connId, current || null);
+    }
+
+    async function saveContext(connId) {
+      const input = document.getElementById(`ctx-input-${connId}`);
+      const text = input.value.trim() || null;
+      const section = document.getElementById(`conn-ctx-${connId}`);
+
+      input.disabled = true;
+
+      const res = await fetch(`${BACKEND_URL}/connections/${connId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', ...authHeaders() },
+        credentials: 'include',
+        body: JSON.stringify({ org_context: text }),
+      });
+
+      if (res.ok) {
+        section.dataset.context = text || '';
+        section.innerHTML = _contextDisplay(connId, text);
+      } else {
+        input.disabled = false;
+        const errSpan = document.createElement('span');
+        errSpan.style.cssText = 'color:var(--error);font-size:12px;margin-top:4px;display:block';
+        errSpan.textContent = 'Could not save. Please try again.';
+        section.appendChild(errSpan);
+      }
+    }
+
+    async function connectMock() {
+      const res = await fetch(`${BACKEND_URL}/connections`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...authHeaders() },
+        credentials: 'include',
+        body: JSON.stringify({ db_type: 'mock', name: 'Sample data' }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        window.location.href = `/pages/demo.html?connection_id=${data.id}`;
+      }
+    }
+
+    function togglePgForm() {
+      document.getElementById('pg-form').classList.toggle('open');
+    }
+
+    async function submitPostgres() {
+      const name     = document.getElementById('pg-name').value.trim();
+      const host     = document.getElementById('pg-host').value.trim();
+      const port     = document.getElementById('pg-port').value.trim() || '5432';
+      const database = document.getElementById('pg-database').value.trim();
+      const username = document.getElementById('pg-username').value.trim();
+      const password = document.getElementById('pg-password').value;
+      const errEl    = document.getElementById('pg-error');
+      errEl.classList.remove('visible');
+
+      if (!name || !host || !database || !username) {
+        errEl.textContent = 'Name, host, database, and username are required.';
+        errEl.classList.add('visible');
+        return;
+      }
+
+      const encodedUser = encodeURIComponent(username);
+      const encodedPass = encodeURIComponent(password);
+      const encodedDb   = encodeURIComponent(database);
+      const url = `postgresql://${encodedUser}:${encodedPass}@${host}:${port}/${encodedDb}`;
+
+      const orgContext = document.getElementById('pg-context').value.trim() || null;
+
+      const res = await fetch(`${BACKEND_URL}/connections`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...authHeaders() },
+        credentials: 'include',
+        body: JSON.stringify({ db_type: 'postgres', name, credentials: { url }, org_context: orgContext }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        window.location.href = `/pages/demo.html?connection_id=${data.id}`;
+      } else {
+        const d = await res.json().catch(() => ({}));
+        errEl.textContent = d.detail || 'Connection failed.';
+        errEl.classList.add('visible');
+      }
+    }
+
+    function toggleBqForm() {
+      document.getElementById('bq-form').classList.toggle('open');
+    }
+
+    let _bqAuthMode = 'sa';
+    function setBqAuthMode(mode) {
+      _bqAuthMode = mode;
+      document.getElementById('bq-sa-fields').style.display = mode === 'sa' ? 'flex' : 'none';
+      document.getElementById('bq-oauth-fields').style.display = mode === 'oauth' ? 'flex' : 'none';
+      document.querySelectorAll('.auth-mode-tab').forEach(t => t.classList.remove('active'));
+      document.getElementById(`tab-${mode}`).classList.add('active');
+    }
+
+    async function submitBigQuery(authMode) {
+      const name        = document.getElementById('bq-name').value.trim();
+      const project     = document.getElementById('bq-project').value.trim();
+      const dataProject = document.getElementById('bq-data-project').value.trim();
+      const errEl       = document.getElementById('bq-error');
+      errEl.classList.remove('visible');
+
+      if (!name || !project) {
+        errEl.textContent = 'Connection name and billing project are required.';
+        errEl.classList.add('visible');
+        return;
+      }
+
+      const credentials = { billing_project: project, auth_mode: authMode };
+      if (dataProject) credentials.data_project = dataProject;
+
+      if (authMode === 'sa') {
+        const saJson = document.getElementById('bq-sa-json').value.trim();
+        if (!saJson) {
+          errEl.textContent = 'Service account JSON is required.';
+          errEl.classList.add('visible');
+          return;
+        }
+        try { JSON.parse(saJson); } catch {
+          errEl.textContent = 'Invalid JSON — paste the full service account key file.';
+          errEl.classList.add('visible');
+          return;
+        }
+        credentials.sa_json = saJson;
+      }
+
+      const orgContext = document.getElementById('bq-context').value.trim() || null;
+
+      const res = await fetch(`${BACKEND_URL}/connections`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...authHeaders() },
+        credentials: 'include',
+        body: JSON.stringify({ db_type: 'bigquery', name, credentials, org_context: orgContext }),
+      });
+
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}));
+        errEl.textContent = d.detail || 'Could not create connection.';
+        errEl.classList.add('visible');
+        return;
+      }
+
+      const conn = await res.json();
+
+      if (authMode === 'sa') {
+        window.location.href = `/pages/demo.html?connection_id=${conn.id}`;
+      } else {
+        // OAuth: navigate to backend, which redirects to Google sign-in
+        window.location.href = `${BACKEND_URL}/auth/bigquery?connection_id=${conn.id}`;
+      }
+    }
+
+    // ── Profile ──
+
+    function loadProfile(user) {
+      document.getElementById('account-name').value = user.name || '';
+      document.getElementById('account-email').value = user.email || '';
+      document.getElementById('newsletter-toggle').checked = user.newsletter_opt_in !== false;
+    }
+
+    async function saveProfile() {
+      const name = document.getElementById('account-name').value.trim();
+      const newsletter_opt_in = document.getElementById('newsletter-toggle').checked;
+      const btn = document.getElementById('btn-save');
+      const fb = document.getElementById('profile-feedback');
+
+      fb.className = 'feedback-msg';
+      btn.disabled = true;
+      btn.textContent = 'Saving…';
+
+      try {
+        const res = await fetch(`${BACKEND_URL}/auth/me`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', ...authHeaders() },
+          credentials: 'include',
+          body: JSON.stringify({ name, newsletter_opt_in }),
+        });
+        if (res.ok) {
+          fb.textContent = 'Saved!';
+          fb.classList.add('ok');
+          setTimeout(() => fb.className = 'feedback-msg', 2500);
+        } else {
+          const d = await res.json().catch(() => ({}));
+          fb.textContent = d.detail || 'Save failed.';
+          fb.classList.add('err');
+        }
+      } catch {
+        fb.textContent = 'Network error.';
+        fb.classList.add('err');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Save changes';
+      }
+    }
+
+    // ── Refer a Friend ──
+
+    let _referralLoaded = false;
+
+    async function loadReferral() {
+      if (_referralLoaded) return;
+      _referralLoaded = true;
+
+      const res = await fetch(`${BACKEND_URL}/auth/referral`, { credentials: 'include', headers: authHeaders() });
+      if (!res.ok) return;
+      const data = await res.json();
+
+      document.getElementById('refer-link').value = data.link;
+      const count = data.use_count;
+      document.getElementById('refer-stat').innerHTML = count === 0
+        ? 'No signups yet — share your link to get started.'
+        : `<strong>${count}</strong> ${count === 1 ? 'person has' : 'people have'} signed up using your link.`;
+    }
+
+    async function copyReferralLink() {
+      const input = document.getElementById('refer-link');
+      const btn = document.getElementById('btn-copy');
+      try {
+        await navigator.clipboard.writeText(input.value);
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy', 2000);
+      } catch {
+        input.select();
+        document.execCommand('copy');
+      }
+    }
+
+    // ── Slack workspace linking ──
+
+    const _slackStatusCache = {};
+    let _installedWorkspaces = [];
+
+    const SLACK_ICON = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/></svg>`;
+
+    function _closeAllPickers() {
+      document.querySelectorAll('.slack-picker.open').forEach(p => p.classList.remove('open'));
+    }
+    document.addEventListener('click', _closeAllPickers);
+
+    async function initSlackButtons(conns) {
+      if (!slackEnabled) return;
+      const [wsRes, ...statusResults] = await Promise.all([
+        fetch(`${BACKEND_URL}/slack/workspaces`, { credentials: 'include', headers: authHeaders() }),
+        ...conns.map(c => fetch(`${BACKEND_URL}/connections/${c.id}/slack`, { credentials: 'include', headers: authHeaders() })),
+      ]);
+      _installedWorkspaces = wsRes.ok ? await wsRes.json() : [];
+      for (let i = 0; i < conns.length; i++) {
+        const status = statusResults[i].ok ? await statusResults[i].json() : { connected: false };
+        _slackStatusCache[conns[i].id] = status;
+        _applySlackButtonState(conns[i].id, status);
+      }
+    }
+
+    function _applySlackButtonState(connectionId, status) {
+      const btn   = document.getElementById(`slack-btn-${connectionId}`);
+      const label = document.getElementById(`slack-btn-label-${connectionId}`);
+      const icon  = document.getElementById(`slack-icon-${connectionId}`);
+      if (!btn || !label) return;
+      if (status.connected) {
+        btn.classList.add('connected');
+        btn.title = `Connected to ${status.team_name}`;
+        label.textContent = `${status.team_name} ✓`;
+        if (icon) { icon.style.filter = 'none'; icon.style.opacity = '1'; }
+      } else {
+        btn.classList.remove('connected');
+        btn.title = '';
+        const hasWorkspaces = _installedWorkspaces.length > 0;
+        label.textContent = hasWorkspaces ? 'Add to Slack ▾' : 'Add to Slack';
+        if (icon) {
+          icon.style.filter = hasWorkspaces ? 'none' : 'grayscale(1)';
+          icon.style.opacity = hasWorkspaces ? '1' : '0.7';
+        }
+      }
+    }
+
+    function onSlackBtnClick(event, connectionId) {
+      event.stopPropagation();
+      const status = _slackStatusCache[connectionId] || { connected: false };
+
+      if (status.connected) {
+        if (!confirm(`Disconnect from Slack workspace "${status.team_name}"?`)) return;
+        _disconnectSlack(connectionId);
+        return;
+      }
+
+      if (_installedWorkspaces.length === 0) {
+        window.location.href = `${BACKEND_URL}/slack/oauth/start`;
+        return;
+      }
+
+      _showSlackPicker(connectionId);
+    }
+
+    function _showSlackPicker(connectionId) {
+      _closeAllPickers();
+      const picker = document.getElementById(`slack-picker-${connectionId}`);
+      if (!picker) return;
+
+      picker.innerHTML = _installedWorkspaces.map(ws => `
+        <div class="slack-picker-item" onclick="event.stopPropagation(); _linkSlack('${connectionId}', '${ws.workspace_id}', '${ws.team_name}')">
+          ${SLACK_ICON}
+          ${ws.team_name}
+        </div>
+      `).join('') + `
+        <hr class="slack-picker-divider">
+        <a class="slack-picker-install" href="${BACKEND_URL}/slack/oauth/start" onclick="event.stopPropagation()">
+          + Install in another workspace
+        </a>
+      `;
+      picker.classList.add('open');
+    }
+
+    async function _linkSlack(connectionId, workspaceId, teamName) {
+      _closeAllPickers();
+      const res = await fetch(`${BACKEND_URL}/connections/${connectionId}/slack`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...authHeaders() },
+        credentials: 'include',
+        body: JSON.stringify({ workspace_id: workspaceId }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        _slackStatusCache[connectionId] = data;
+        _applySlackButtonState(connectionId, data);
+      } else {
+        alert('Could not link workspace. Please try again.');
+      }
+    }
+
+    async function _disconnectSlack(connectionId) {
+      const res = await fetch(`${BACKEND_URL}/connections/${connectionId}/slack`, {
+        method: 'DELETE', credentials: 'include', headers: authHeaders(),
+      });
+      if (res.ok) {
+        _slackStatusCache[connectionId] = { connected: false };
+        _applySlackButtonState(connectionId, { connected: false });
+      }
+    }
+
+    // ── All Conversations ──
+
+    let _conversationsLoaded = false;
+
+    async function loadAllConversations() {
+      if (_conversationsLoaded) return;
+      _conversationsLoaded = true;
+      const el = document.getElementById('conv-all-list');
+
+      const res = await fetch(`${BACKEND_URL}/conversations`, { credentials: 'include', headers: authHeaders() });
+      if (!res.ok) {
+        el.innerHTML = '<p style="color:var(--muted);font-size:14px">Could not load conversations.</p>';
+        return;
+      }
+      const convs = await res.json();
+      if (!convs.length) {
+        el.innerHTML = '<p style="color:var(--muted);font-size:14px">No conversations yet. Start by opening a connection.</p>';
+        return;
+      }
+      el.innerHTML = convs.map(c => `
+        <div class="conv-all-row" onclick="window.location.href='/pages/demo.html?connection_id=${c.connection_id}'">
+          <div class="conv-all-icon">${ICONS[c.db_type] || '🗄️'}</div>
+          <div class="conv-all-body">
+            <div class="conv-all-title">${c.title || 'Untitled conversation'}</div>
+            <div class="conv-all-meta">
+              <span class="conn-badge ${BADGE_CLASS[c.db_type] || ''}">${c.connection_name}</span>
+              ${formatDate(c.created_at)}
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ── Init ──
+
+    (async () => {
+      // Auth gate — only /auth/me is inside this try/catch
+      let user;
+      try {
+        const meRes = await fetch(`${BACKEND_URL}/auth/me`, { credentials: 'include', headers: authHeaders() });
+        if (!meRes.ok) { localStorage.removeItem('cynda_token'); window.location.href = '/pages/login.html'; return; }
+        user = await meRes.json();
+      } catch {
+        window.location.href = '/pages/login.html';
+        return;
+      }
+
+      // Secondary data — failures are non-fatal
+      const [connsRes, slackRes] = await Promise.all([
+        fetch(`${BACKEND_URL}/connections`, { credentials: 'include', headers: authHeaders() }).catch(() => null),
+        fetch(`${BACKEND_URL}/slack/enabled`, { credentials: 'include', headers: authHeaders() }).catch(() => null),
+      ]);
+      const conns = connsRes?.ok ? await connsRes.json().catch(() => []) : [];
+      const slackData = slackRes?.ok ? await slackRes.json().catch(() => ({ enabled: false })) : { enabled: false };
+      slackEnabled = slackData.enabled;
+
+      document.getElementById('nav-email').textContent = user.email;
+      loadProfile(user);
+      renderConnections(conns);
+
+      const params = new URLSearchParams(window.location.search);
+      const isSlackInstall = params.get('slack') === 'installed';
+      const isSlackError   = params.get('slack') === 'error';
+      const isBqError      = params.get('bq') === 'error';
+
+      if (slackEnabled) {
+        await initSlackButtons(conns);
+        if (isSlackInstall) {
+          const firstUnlinked = conns.find(c => !(_slackStatusCache[c.id]?.connected));
+          if (firstUnlinked) _showSlackPicker(firstUnlinked.id);
+        }
+      }
+
+      // Handle redirect back from Slack OAuth
+      if (isSlackInstall) {
+        const wsName = params.get('workspace') || 'your workspace';
+        const banner = document.createElement('div');
+        banner.style.cssText = 'position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#1E2333;border:1px solid #4A154B;color:#E8E8E4;padding:12px 20px;border-radius:10px;font-size:14px;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,0.4)';
+        banner.textContent = `✓ Cynda instalado no ${decodeURIComponent(wsName)}! Selecione uma conexão para vincular ao Slack.`;
+        document.body.appendChild(banner);
+        setTimeout(() => banner.remove(), 6000);
+        history.replaceState({}, '', '/pages/dashboard.html');
+      } else if (isSlackError) {
+        alert('Slack installation failed. Please try again.');
+        history.replaceState({}, '', '/pages/dashboard.html');
+      }
+
+      // Handle redirect back from BigQuery OAuth
+      if (isBqError) {
+        const banner = document.createElement('div');
+        banner.style.cssText = 'position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#1E2333;border:1px solid var(--error);color:var(--error);padding:12px 20px;border-radius:10px;font-size:14px;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,0.4)';
+        banner.textContent = 'BigQuery authorization failed. Please try connecting again.';
+        document.body.appendChild(banner);
+        setTimeout(() => banner.remove(), 5000);
+        history.replaceState({}, '', '/pages/dashboard.html');
+      }
+    })();
+  </script>
+</body>
+
+</html>

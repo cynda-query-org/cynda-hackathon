@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/logos/cynda.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google-site-verification" content="efuCb5RBbXotfl8DbDPS954mBi6B4Zb_qlIisz0J3DI" />
+  <title>Cynda — Your data team, in Slack.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+</head>
+<body>
+
+  <!-- ─── NAV ──────────────────────────────────────────────────────── -->
+  <nav id="main-nav">
+    <a class="nav-logo" href="#">Cynda</a>
+    <div class="nav-right">
+      <a class="nav-cta" href="/pages/login.html">Sign in</a>
+      <a class="nav-cta nav-cta--primary" href="/pages/login.html?tab=signup">Register</a>
+    </div>
+  </nav>
+
+  <!-- ─── HERO ─────────────────────────────────────────────────────── -->
+  <section id="hero">
+    <div class="hero-content">
+      <h1 class="hero-headline">
+        Get closer to your data.<br>
+        <span class="accent">Ask. Get answers. Anytime, anywhere.</span>
+      </h1>
+      <p class="hero-sub">
+        Cynda connects to your database and answers your team's questions on Slack. No JIRA tickets.
+        Unlock the insights faster than your next planning session.
+      </p>
+      <div class="hero-form-wrap" id="hero-form">
+        <a href="/pages/login.html?tab=signup" class="submit-btn">Get started</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── HIGHLIGHT ───────────────────────────────────────────────────── -->
+  <section id="highlight">
+    <div class="section-inner">
+      <p class="section-label">Live Demo</p>
+      <h2 class="section-title">Try Cynda now</h2>
+      <div class="demo-embed">
+
+        <!-- Dataset panel -->
+        <aside class="demo-sidebar">
+          <div class="demo-sidebar-label">Dataset</div>
+          <div class="demo-dataset-name">Olist E-commerce</div>
+          <span class="demo-dataset-tag">BigQuery · Brazil</span>
+          <p class="demo-dataset-desc">100k+ real orders from Brazil's largest e-commerce marketplace (2016–2018). Orders, payments, sellers, and more.</p>
+          <div class="demo-tables-section">
+            <div class="demo-sidebar-label">Tables</div>
+            <div class="demo-tables">
+              <span class="demo-table-chip">customers</span>
+              <span class="demo-table-chip">geolocation</span>
+              <span class="demo-table-chip">order_items</span>
+              <span class="demo-table-chip">order_payments</span>
+              <span class="demo-table-chip">order_reviews</span>
+              <span class="demo-table-chip">orders</span>
+              <span class="demo-table-chip">product_category_translation</span>
+              <span class="demo-table-chip">products</span>
+              <span class="demo-table-chip">sellers</span>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Chat -->
+        <div class="demo-chat">
+          <div class="demo-messages" id="demo-messages"></div>
+          <div class="demo-input-area">
+            <div class="demo-suggestions" id="demo-suggestions"></div>
+            <form class="demo-form" id="demo-form" novalidate>
+              <input class="demo-input" id="demo-input" type="text" placeholder="Ask anything about the data…" autocomplete="off" maxlength="500" />
+              <button class="demo-send" id="demo-send-btn" type="submit">Send</button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── HOW IT WORKS ─────────────────────────────────────────────── -->
+  <section id="how">
+    <div class="section-inner">
+      <p class="section-label">How it works</p>
+      <h2 class="section-title">How Cynda works</h2>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-title">Connect</div>
+          <p class="step-desc">Provide access to the data. No complex setup, no infrastructure changes.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-title">Ask</div>
+          <p class="step-desc">Type your question in any Slack channel. Plain English — no SQL knowledge required.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-title">Get answers</div>
+          <p class="step-desc">Cynda replies on Slack, using your language and optionally provides the SQL code for analysts.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── LOGOS STRIP ───────────────────────────────────────────────── -->
+  <section id="logos">
+    <div class="section-inner">
+      <p class="logos-label">Works with tools your team already uses</p>
+      <div class="logos-row">
+
+        <!-- Slack logo -->
+        <div class="logo-item">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M7.15 17.5a2.65 2.65 0 1 1-2.65-2.65H7.15V17.5Z" fill="#E01E5A"/>
+            <path d="M8.5 17.5a2.65 2.65 0 0 1 5.3 0v6.65a2.65 2.65 0 0 1-5.3 0V17.5Z" fill="#E01E5A"/>
+            <path d="M11.15 7.15a2.65 2.65 0 1 1 2.65-2.65v2.65H11.15Z" fill="#36C5F0"/>
+            <path d="M11.15 8.5a2.65 2.65 0 0 1 0 5.3H4.5a2.65 2.65 0 0 1 0-5.3h6.65Z" fill="#36C5F0"/>
+            <path d="M21.5 11.15a2.65 2.65 0 1 1 2.65 2.65H21.5V11.15Z" fill="#2EB67D"/>
+            <path d="M20.15 11.15a2.65 2.65 0 0 1-5.3 0V4.5a2.65 2.65 0 0 1 5.3 0v6.65Z" fill="#2EB67D"/>
+            <path d="M17.5 21.5a2.65 2.65 0 1 1-2.65 2.65V21.5H17.5Z" fill="#ECB22E"/>
+            <path d="M17.5 20.15a2.65 2.65 0 0 1 0-5.3h6.65a2.65 2.65 0 0 1 0 5.3H17.5Z" fill="#ECB22E"/>
+          </svg>
+          <span>Slack</span>
+        </div>
+
+        <!-- PostgreSQL logo -->
+        <div class="logo-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 25.6 25.6" aria-hidden="true">
+            <g fill="none" stroke="#fff">
+              <path d="M18.983 18.636c.163-1.357.114-1.555 1.124-1.336l.257.023c.777.035 1.793-.125 2.4-.402 1.285-.596 2.047-1.592.78-1.33-2.89.596-3.1-.383-3.1-.383 3.053-4.53 4.33-10.28 3.227-11.687-3.004-3.84-8.205-2.024-8.292-1.976l-.028.005c-.57-.12-1.2-.19-1.93-.2-1.308-.02-2.3.343-3.054.914 0 0-9.277-3.822-8.846 4.807.092 1.836 2.63 13.9 5.66 10.25C8.29 15.987 9.36 14.86 9.36 14.86c.53.353 1.167.533 1.834.468l.052-.044a2.01 2.01 0 0 0 .021.518c-.78.872-.55 1.025-2.11 1.346-1.578.325-.65.904-.046 1.056.734.184 2.432.444 3.58-1.162l-.046.183c.306.245.285 1.76.33 2.842s.116 2.093.337 2.688.48 2.13 2.53 1.7c1.713-.367 3.023-.896 3.143-5.81" fill="#000" stroke="#000" stroke-linecap="butt" stroke-width="2.149" stroke-linejoin="miter"/>
+              <path d="M23.535 15.6c-2.89.596-3.1-.383-3.1-.383 3.053-4.53 4.33-10.28 3.228-11.687-3.004-3.84-8.205-2.023-8.292-1.976l-.028.005a10.31 10.31 0 0 0-1.929-.201c-1.308-.02-2.3.343-3.054.914 0 0-9.278-3.822-8.846 4.807.092 1.836 2.63 13.9 5.66 10.25C8.29 15.987 9.36 14.86 9.36 14.86c.53.353 1.167.533 1.834.468l.052-.044a2.02 2.02 0 0 0 .021.518c-.78.872-.55 1.025-2.11 1.346-1.578.325-.65.904-.046 1.056.734.184 2.432.444 3.58-1.162l-.046.183c.306.245.52 1.593.484 2.815s-.06 2.06.18 2.716.48 2.13 2.53 1.7c1.713-.367 2.6-1.32 2.725-2.906.088-1.128.286-.962.3-1.97l.16-.478c.183-1.53.03-2.023 1.085-1.793l.257.023c.777.035 1.794-.125 2.39-.402 1.285-.596 2.047-1.592.78-1.33z" fill="#336791" stroke="none"/>
+              <g stroke-width=".716">
+                <g stroke-linecap="round">
+                  <path d="M12.814 16.467c-.08 2.846.02 5.712.298 6.4s.875 2.05 2.926 1.612c1.713-.367 2.337-1.078 2.607-2.647l.633-5.017M10.356 2.2S1.072-1.596 1.504 7.033c.092 1.836 2.63 13.9 5.66 10.25C8.27 15.95 9.27 14.907 9.27 14.907m6.1-13.4c-.32.1 5.164-2.005 8.282 1.978 1.1 1.407-.175 7.157-3.228 11.687" stroke-linejoin="round"/>
+                  <path d="M20.425 15.17s.2.98 3.1.382c1.267-.262.504.734-.78 1.33-1.054.49-3.418.615-3.457-.06-.1-1.745 1.244-1.215 1.147-1.652-.088-.394-.69-.78-1.086-1.744-.347-.84-4.76-7.29 1.224-6.333.22-.045-1.56-5.7-7.16-5.782S7.99 8.196 7.99 8.196" stroke-linejoin="bevel"/>
+                </g>
+                <g stroke-linejoin="round">
+                  <path d="M11.247 15.768c-.78.872-.55 1.025-2.11 1.346-1.578.325-.65.904-.046 1.056.734.184 2.432.444 3.58-1.163.35-.49-.002-1.27-.482-1.468-.232-.096-.542-.216-.94.23z"/>
+                  <path d="M11.196 15.753c-.08-.513.168-1.122.433-1.836.398-1.07 1.316-2.14.582-5.537-.547-2.53-4.22-.527-4.22-.184s.166 1.74-.06 3.365c-.297 2.122 1.35 3.916 3.246 3.733" stroke-linecap="round"/>
+                </g>
+              </g>
+              <g fill="#fff" stroke-linejoin="miter">
+                <path d="M10.322 8.145c-.017.117.215.43.516.472s.558-.202.575-.32-.215-.246-.516-.288-.56.02-.575.136z" stroke-width=".239"/>
+                <path d="M19.486 7.906c.016.117-.215.43-.516.472s-.56-.202-.575-.32.215-.246.516-.288.56.02.575.136z" stroke-width=".119"/>
+              </g>
+              <path d="M20.562 7.095c.05.92-.198 1.545-.23 2.524-.046 1.422.678 3.05-.413 4.68" stroke-linecap="round" stroke-linejoin="round" stroke-width=".716"/>
+            </g>
+          </svg>
+          <span>PostgreSQL</span>
+        </div>
+
+        <!-- Google BigQuery logo -->
+        <div class="logo-item">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <!-- outer hexagon: Google Blue top-left, Google Red top-right, Google Yellow bottom-right, Google Green bottom-left -->
+            <path d="M14 2L4 7.5V20.5L14 26L24 20.5V7.5L14 2Z" fill="none"/>
+            <!-- left half -->
+            <path d="M14 2L4 7.5V20.5L14 26V2Z" fill="#4285F4"/>
+            <!-- right half -->
+            <path d="M14 2L24 7.5V20.5L14 26V2Z" fill="#1A73E8"/>
+            <!-- top accent -->
+            <path d="M4 7.5L14 2L24 7.5L14 11L4 7.5Z" fill="#669DF6"/>
+            <!-- magnifying glass circle -->
+            <circle cx="13.5" cy="13.5" r="4" fill="none" stroke="white" stroke-width="2"/>
+            <!-- magnifying glass handle -->
+            <line x1="16.3" y1="16.3" x2="19.5" y2="19.5" stroke="#FBBC04" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+          <span>BigQuery</span>
+        </div>
+
+      </div>
+
+      <!-- Second row: grayscale logos -->
+      <div class="logos-row">
+
+        <!-- Microsoft Teams logo -->
+        <div class="logo-item logo-item--gray">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="4 4 36 38" width="28" height="28" aria-hidden="true">
+            <path fill="url(#teams-a)" d="M21.9999 20h12c3.3137 0 6 2.6863 6 6v10c0 3.3137-2.6863 6-6 6s-6-2.6863-6-6V26c0-3.3137-2.6863-6-6-6"/>
+            <path fill="url(#teams-b)" d="M7.99988 24c0-3.3137 2.68632-6 6.00002-6h8c3.3137 0 6 2.6863 6 6v12c0 3.3137 2.6863 6 6 6l-16.0001-.0001c-5.5228 0-9.99992-4.4771-9.99992-10z"/>
+            <path fill="url(#teams-c)" fill-opacity=".7" d="M7.99988 24c0-3.3137 2.68632-6 6.00002-6h8c3.3137 0 6 2.6863 6 6v12c0 3.3137 2.6863 6 6 6l-16.0001-.0001c-5.5228 0-9.99992-4.4771-9.99992-10z"/>
+            <path fill="url(#teams-d)" fill-opacity=".7" d="M7.99988 24c0-3.3137 2.68632-6 6.00002-6h8c3.3137 0 6 2.6863 6 6v12c0 3.3137 2.6863 6 6 6l-16.0001-.0001c-5.5228 0-9.99992-4.4771-9.99992-10z"/>
+            <path fill="url(#teams-e)" d="M32.9999 18c2.7614 0 5-2.2386 5-5s-2.2386-5-5-5-5 2.2386-5 5 2.2386 5 5 5"/>
+            <path fill="url(#teams-f)" fill-opacity=".46" d="M32.9999 18c2.7614 0 5-2.2386 5-5s-2.2386-5-5-5-5 2.2386-5 5 2.2386 5 5 5"/>
+            <path fill="url(#teams-g)" fill-opacity=".4" d="M32.9999 18c2.7614 0 5-2.2386 5-5s-2.2386-5-5-5-5 2.2386-5 5 2.2386 5 5 5"/>
+            <path fill="url(#teams-h)" d="M17.9999 16c3.3137 0 6-2.6863 6-6 0-3.31371-2.6863-6-6-6s-6 2.68629-6 6c0 3.3137 2.6863 6 6 6"/>
+            <path fill="url(#teams-i)" fill-opacity=".6" d="M17.9999 16c3.3137 0 6-2.6863 6-6 0-3.31371-2.6863-6-6-6s-6 2.68629-6 6c0 3.3137 2.6863 6 6 6"/>
+            <path fill="url(#teams-j)" fill-opacity=".5" d="M17.9999 16c3.3137 0 6-2.6863 6-6 0-3.31371-2.6863-6-6-6s-6 2.68629-6 6c0 3.3137 2.6863 6 6 6"/>
+            <rect width="16" height="16" x="4" y="23" fill="url(#teams-k)" rx="3.25"/>
+            <rect width="16" height="16" x="4" y="23" fill="url(#teams-l)" fill-opacity=".7" rx="3.25"/>
+            <path fill="#fff" d="M15.4792 28.1054h-2.4471v7.466h-2.0648v-7.466H8.52014v-1.6768h6.95906z"/>
+            <defs>
+              <radialGradient id="teams-a" cx="0" cy="0" r="1" gradientTransform="matrix(13.4784 0 0 33.2694 39.7967 22.1739)" gradientUnits="userSpaceOnUse"><stop stop-color="#a98aff"/><stop offset=".14" stop-color="#8c75ff"/><stop offset=".565" stop-color="#5f50e2"/><stop offset=".9" stop-color="#3c2cb8"/></radialGradient>
+              <radialGradient id="teams-b" cx="0" cy="0" r="1" gradientTransform="rotate(68.1539 -7.71566095 14.71355834)scale(32.752 33.1231)" gradientUnits="userSpaceOnUse"><stop stop-color="#85c2ff"/><stop offset=".69" stop-color="#7588ff"/><stop offset="1" stop-color="#6459fe"/></radialGradient>
+              <radialGradient id="teams-c" x1="20.5936" x2="20.5936" y1="18" y2="42" gradientUnits="userSpaceOnUse"><stop offset=".801159" stop-color="#6864f6" stop-opacity="0"/><stop offset="1" stop-color="#5149de"/></radialGradient>
+              <radialGradient id="teams-d" cx="0" cy="0" r="1" gradientTransform="rotate(113.326 8.09285255 17.64474501)scale(19.2186 15.4273)" gradientUnits="userSpaceOnUse"><stop stop-color="#bd96ff"/><stop offset=".686685" stop-color="#bd96ff" stop-opacity="0"/></radialGradient>
+              <radialGradient id="teams-e" cx="0" cy="0" r="1" gradientTransform="matrix(0 -10 12.6216 0 32.9999 11.5714)" gradientUnits="userSpaceOnUse"><stop offset=".268201" stop-color="#6868f7"/><stop offset="1" stop-color="#3923b1"/></radialGradient>
+              <radialGradient id="teams-f" cx="0" cy="0" r="1" gradientTransform="rotate(40.0516 -.03068196 44.8729095)scale(7.14629 10.3363)" gradientUnits="userSpaceOnUse"><stop offset=".270711" stop-color="#a1d3ff"/><stop offset=".813393" stop-color="#a1d3ff" stop-opacity="0"/></radialGradient>
+              <radialGradient id="teams-g" cx="0" cy="0" r="1" gradientTransform="rotate(-41.6581 32.11799918 -43.41948423)scale(8.51275 20.8824)" gradientUnits="userSpaceOnUse"><stop stop-color="#e3acfd"/><stop offset=".816041" stop-color="#9fa2ff" stop-opacity="0"/></radialGradient>
+              <radialGradient id="teams-h" cx="0" cy="0" r="1" gradientTransform="matrix(0 -12 15.146 0 17.9999 8.28571)" gradientUnits="userSpaceOnUse"><stop offset=".268201" stop-color="#8282ff"/><stop offset="1" stop-color="#3923b1"/></radialGradient>
+              <radialGradient id="teams-i" cx="0" cy="0" r="1" gradientTransform="rotate(40.0516 -3.15465147 21.41641466)scale(8.57554 12.4035)" gradientUnits="userSpaceOnUse"><stop offset=".270711" stop-color="#a1d3ff"/><stop offset=".813393" stop-color="#a1d3ff" stop-opacity="0"/></radialGradient>
+              <radialGradient id="teams-j" cx="0" cy="0" r="1" gradientTransform="rotate(-41.6581 20.38180375 -26.51566158)scale(10.2153 25.0589)" gradientUnits="userSpaceOnUse"><stop stop-color="#e3acfd"/><stop offset=".816041" stop-color="#9fa2ff" stop-opacity="0"/></radialGradient>
+              <radialGradient id="teams-k" cx="0" cy="0" r="1" gradientTransform="rotate(45 -25.76345597 16.32842712)scale(22.6274)" gradientUnits="userSpaceOnUse"><stop offset=".046875" stop-color="#688eff"/><stop offset=".946875" stop-color="#230f94"/></radialGradient>
+              <radialGradient id="teams-l" cx="0" cy="0" r="1" gradientTransform="matrix(0 11.2 -13.0702 0 12 32.6)" gradientUnits="userSpaceOnUse"><stop offset=".570647" stop-color="#6965f6" stop-opacity="0"/><stop offset="1" stop-color="#8f8fff"/></radialGradient>
+            </defs>
+          </svg>
+          <span>Teams</span>
+        </div>
+
+        <!-- Snowflake logo -->
+        <div class="logo-item logo-item--gray">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="28" height="28" fill="#29b5e8" aria-hidden="true">
+            <path d="M9.86 15.298l13.008 7.8a3.72 3.72 0 0 0 4.589-.601 4.01 4.01 0 0 0 1.227-2.908V3.956a3.81 3.81 0 0 0-1.861-3.42 3.81 3.81 0 0 0-3.893 0 3.81 3.81 0 0 0-1.861 3.42v8.896l-7.387-4.43a3.79 3.79 0 0 0-2.922-.4c-.986.265-1.818.94-2.3 1.844-1.057 1.9-.44 4.28 1.4 5.422m31.27 7.8l13.008-7.8c1.84-1.143 2.458-3.533 1.4-5.424a3.75 3.75 0 0 0-5.22-1.452l-7.3 4.37v-8.84a3.81 3.81 0 1 0-7.615 0v15.323a4.08 4.08 0 0 0 .494 2.367c.482.903 1.314 1.57 2.3 1.844a3.71 3.71 0 0 0 2.922-.4M29.552 31.97c.013-.25.108-.5.272-.68l1.52-1.58a1.06 1.06 0 0 1 .658-.282h.057a1.05 1.05 0 0 1 .656.282l1.52 1.58a1.12 1.12 0 0 1 .272.681v.06a1.13 1.13 0 0 1-.272.683l-1.52 1.58a1.04 1.04 0 0 1-.656.284h-.057c-.246-.014-.48-.115-.658-.284l-1.52-1.58a1.13 1.13 0 0 1-.272-.683zm-4.604-.65v1.364a1.54 1.54 0 0 0 .372.93l5.16 5.357a1.42 1.42 0 0 0 .895.386h1.312a1.42 1.42 0 0 0 .895-.386l5.16-5.357a1.54 1.54 0 0 0 .372-.93V31.32a1.54 1.54 0 0 0-.372-.93l-5.16-5.357a1.42 1.42 0 0 0-.895-.386h-1.312a1.42 1.42 0 0 0-.895.386L25.32 30.4a1.55 1.55 0 0 0-.372.93M3.13 27.62l7.365 4.417L3.13 36.45a4.06 4.06 0 0 0-1.399 5.424 3.75 3.75 0 0 0 2.3 1.844c.986.274 2.042.133 2.922-.392l13.008-7.8c1.2-.762 1.9-2.078 1.9-3.492a4.16 4.16 0 0 0-1.9-3.492l-13.008-7.8a3.79 3.79 0 0 0-2.922-.4c-.986.265-1.818.94-2.3 1.844-1.057 1.9-.44 4.278 1.4 5.422m38.995 4.442a4 4 0 0 0 1.91 3.477l13 7.8c.88.524 1.934.666 2.92.392s1.817-.94 2.3-1.843a4.05 4.05 0 0 0-1.4-5.424L53.5 32.038l7.365-4.417c1.84-1.143 2.457-3.53 1.4-5.422a3.74 3.74 0 0 0-2.3-1.844c-.987-.274-2.042-.134-2.92.4l-13 7.8a4 4 0 0 0-1.91 3.507M25.48 40.508a3.7 3.7 0 0 0-2.611.464l-13.008 7.8c-1.84 1.143-2.456 3.53-1.4 5.422.483.903 1.314 1.57 2.3 1.843a3.75 3.75 0 0 0 2.922-.392l7.387-4.43v8.83a3.81 3.81 0 1 0 7.614 0V44.4a3.91 3.91 0 0 0-3.205-3.903m28.66 8.276l-13.008-7.8a3.75 3.75 0 0 0-2.922-.392 3.74 3.74 0 0 0-2.3 1.843 4.09 4.09 0 0 0-.494 2.37v15.25a3.81 3.81 0 1 0 7.614 0V51.28l7.287 4.37a3.79 3.79 0 0 0 2.922.4c.986-.265 1.818-.94 2.3-1.844 1.057-1.9.44-4.28-1.4-5.422"/>
+          </svg>
+          <span>Snowflake</span>
+        </div>
+
+        <!-- Amazon Redshift logo -->
+        <div class="logo-item logo-item--gray">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <!-- 3 stacked database slabs (top view of cylinder layers) -->
+            <ellipse cx="14" cy="7.5" rx="9" ry="3" fill="#C7271E"/>
+            <rect x="5" y="7.5" width="18" height="5" fill="#A01E18"/>
+            <ellipse cx="14" cy="12.5" rx="9" ry="3" fill="#C7271E"/>
+            <rect x="5" y="12.5" width="18" height="5" fill="#801510"/>
+            <ellipse cx="14" cy="17.5" rx="9" ry="3" fill="#C7271E"/>
+            <rect x="5" y="17.5" width="18" height="4" fill="#601008"/>
+            <ellipse cx="14" cy="21.5" rx="9" ry="3" fill="#A01E18"/>
+          </svg>
+          <span>Redshift</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FINAL CTA ────────────────────────────────────────────────── -->
+  <section id="cta">
+    <div class="section-inner">
+      <h2 class="section-title">Ready to get started?</h2>
+      <div class="cta-buttons">
+        <a href="/pages/login.html" class="nav-cta nav-cta--lg">Sign in</a>
+        <a href="/pages/login.html?tab=signup" class="nav-cta nav-cta--primary nav-cta--lg">Register</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ────────────────────────────────────────────────────── -->
+  <footer>
+    <p class="footer-copy"><strong>Cynda</strong> &copy; 2026</p>
+    <div class="footer-links">
+      <a class="footer-link" href="/privacy-policy">Privacy Policy</a>
+      <a class="footer-link" href="/terms-of-service">Terms of Service</a>
+      <a class="footer-link" href="mailto:support@cynda.tech">support@cynda.tech</a>
+    </div>
+  </footer>
+
+  <script src="/app.js"></script>
+  <script>
+    // Capture referral token from URL and persist it for signup
+    const _refToken = new URLSearchParams(window.location.search).get('ref');
+    if (_refToken) sessionStorage.setItem('cynda_ref_token', _refToken);
+
+    // Redirect logged-in users to dashboard
+    const _API = '__BACKEND_URL__';
+    (async () => {
+      try {
+        const res = await fetch(`${_API}/auth/me`, { credentials: 'include' });
+        if (res.ok) window.location.replace('/pages/dashboard.html');
+      } catch {}
+    })();
+  </script>
+</body>
+</html>

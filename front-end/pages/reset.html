@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/logos/cynda.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reset password — Cynda</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=DM+Sans:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0F1117;
+      --surface: #181C27;
+      --ember: #F25C1E;
+      --glow: #FF7A3C;
+      --text: #E8E8E4;
+      --muted: #6E7484;
+      --border: #252A38;
+      --error: #E05252;
+    }
+
+    html, body { height: 100%; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    a.logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--ember);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+      margin-bottom: 40px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 28px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    label {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    input {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      padding: 12px 16px;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+
+    input:focus { border-color: var(--ember); }
+    input::placeholder { color: var(--muted); }
+
+    .btn-primary {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      background: var(--ember);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      margin-top: 8px;
+    }
+
+    .btn-primary:hover { background: var(--glow); }
+    .btn-primary:active { transform: scale(0.98); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .error-msg {
+      color: var(--error);
+      font-size: 13px;
+      margin-top: 12px;
+      display: none;
+    }
+    .error-msg.visible { display: block; }
+
+    .success-state { display: none; text-align: center; }
+    .success-state.visible { display: block; }
+
+    .success-state p { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
+
+    .link {
+      color: var(--ember);
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .link:hover { color: var(--glow); }
+  </style>
+</head>
+
+<body>
+  <a href="/" class="logo">cynda</a>
+
+  <div class="card">
+    <div id="reset-form">
+      <h2>Create a new password</h2>
+      <p class="subtitle">Choose something strong — at least 8 characters.</p>
+      <div class="form-group">
+        <label for="new-password">New password</label>
+        <input id="new-password" type="password" placeholder="Min. 8 characters" autocomplete="new-password" />
+      </div>
+      <div class="form-group">
+        <label for="confirm-password">Confirm password</label>
+        <input id="confirm-password" type="password" placeholder="Repeat your password" autocomplete="new-password" />
+      </div>
+      <button class="btn-primary" id="btn-reset" onclick="submitReset()">Update password</button>
+      <p class="error-msg" id="reset-error"></p>
+    </div>
+
+    <div class="success-state" id="reset-success">
+      <p>You're all set — your password has been updated.</p>
+      <a href="/pages/login.html" class="link">Back to sign in →</a>
+    </div>
+  </div>
+
+  <script>
+    const BACKEND_URL = '__BACKEND_URL__';
+    const token = new URLSearchParams(window.location.search).get('token');
+
+    if (!token) {
+      document.getElementById('reset-error').textContent = 'Invalid reset link. Please request a new one.';
+      document.getElementById('reset-error').classList.add('visible');
+      document.getElementById('btn-reset').disabled = true;
+    }
+
+    async function submitReset() {
+      const password = document.getElementById('new-password').value;
+      const confirm = document.getElementById('confirm-password').value;
+      const errEl = document.getElementById('reset-error');
+      const btn = document.getElementById('btn-reset');
+
+      errEl.classList.remove('visible');
+
+      if (password.length < 8) {
+        errEl.textContent = 'Password must be at least 8 characters.';
+        errEl.classList.add('visible');
+        return;
+      }
+      if (password !== confirm) {
+        errEl.textContent = 'Passwords do not match.';
+        errEl.classList.add('visible');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Updating…';
+
+      try {
+        const res = await fetch(`${BACKEND_URL}/auth/reset-password`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token, password }),
+        });
+
+        if (res.ok) {
+          document.getElementById('reset-form').style.display = 'none';
+          document.getElementById('reset-success').classList.add('visible');
+          return;
+        }
+
+        const data = await res.json();
+        errEl.textContent = data.detail || 'Something went wrong. Please try again.';
+        errEl.classList.add('visible');
+      } catch {
+        errEl.textContent = 'Network error. Please try again.';
+        errEl.classList.add('visible');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Update password';
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') submitReset();
+    });
+  </script>
+</body>
+
+</html>

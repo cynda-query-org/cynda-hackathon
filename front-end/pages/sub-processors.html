@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/logos/cynda.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sub-processors — Cynda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/pages/legal.css" />
+  <style>
+    .sp-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+    .sp-table th {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: left;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .sp-table td {
+      font-size: 15px;
+      color: var(--muted);
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      line-height: 1.6;
+    }
+    .sp-table td strong {
+      color: var(--text);
+      display: block;
+      margin-bottom: 2px;
+    }
+    .sp-table tr:last-child td {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── NAV ──────────────────────────────────────────────────────── -->
+  <nav>
+    <a class="nav-logo" href="/">Cynda</a>
+    <a class="nav-back" href="/privacy-policy">← Privacy Policy</a>
+  </nav>
+
+  <!-- ─── CONTENT ──────────────────────────────────────────────────── -->
+  <main class="content">
+    <p class="page-label">Legal</p>
+    <h1 class="page-title">Sub-processors</h1>
+    <p class="page-meta">Last updated: May 25, 2026</p>
+
+    <div class="section">
+      <p>
+        Cynda uses the following third-party companies ("sub-processors") to deliver its service.
+        Each sub-processor is bound by a data processing agreement or equivalent contractual safeguards.
+      </p>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="section">
+      <table class="sp-table">
+        <thead>
+          <tr>
+            <th>Sub-processor</th>
+            <th>Purpose</th>
+            <th>Location</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <strong>Railway</strong>
+              railway.app
+            </td>
+            <td>API hosting and managed PostgreSQL database</td>
+            <td>United States</td>
+          </tr>
+          <tr>
+            <td>
+              <strong>OpenRouter</strong>
+              openrouter.ai
+            </td>
+            <td>LLM request routing to AI model providers</td>
+            <td>United States</td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Google Cloud</strong>
+              cloud.google.com
+            </td>
+            <td>LLM inference via Gemini 2.0 Flash API; BigQuery query execution on user-owned data</td>
+            <td>United States / Global</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2>Updates</h2>
+      <p>
+        We will update this page when sub-processors are added or removed. For questions about
+        our sub-processors, contact <a href="mailto:support@cynda.tech">support@cynda.tech</a>.
+      </p>
+    </div>
+  </main>
+
+  <!-- ─── FOOTER ────────────────────────────────────────────────────── -->
+  <footer>
+    <p class="footer-copy"><strong>Cynda</strong> &copy; 2026</p>
+    <a class="footer-link" href="mailto:support@cynda.tech">support@cynda.tech</a>
+  </footer>
+
+</body>
+</html>

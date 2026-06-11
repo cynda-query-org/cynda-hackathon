@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/logos/cynda.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign in — Cynda</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=DM+Sans:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0F1117;
+      --surface: #181C27;
+      --surface2: #1E2333;
+      --ember: #F25C1E;
+      --glow: #FF7A3C;
+      --text: #E8E8E4;
+      --muted: #6E7484;
+      --border: #252A38;
+      --error: #E05252;
+    }
+
+    html, body { height: 100%; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    a.logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--ember);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+      margin-bottom: 40px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--bg);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 32px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 8px 0;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .tab.active {
+      background: var(--surface2);
+      color: var(--text);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    label {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    input {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      padding: 12px 16px;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+
+    input:focus { border-color: var(--ember); }
+    input::placeholder { color: var(--muted); }
+
+    .btn-primary {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      background: var(--ember);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      margin-top: 8px;
+    }
+
+    .btn-primary:hover { background: var(--glow); }
+    .btn-primary:active { transform: scale(0.98); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .error-banner {
+      display: none;
+      align-items: flex-start;
+      gap: 10px;
+      background: rgba(224, 82, 82, 0.1);
+      border: 1px solid rgba(224, 82, 82, 0.3);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-top: 14px;
+    }
+    .error-banner.visible { display: flex; }
+    .error-banner svg { flex-shrink: 0; margin-top: 1px; }
+    .error-banner-body { flex: 1; }
+    .error-banner-title {
+      display: block;
+      color: var(--error);
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+    .error-banner-detail {
+      display: block;
+      color: #b07070;
+      font-size: 12px;
+      margin-top: 2px;
+      line-height: 1.4;
+    }
+    .error-banner-close {
+      background: none;
+      border: none;
+      color: #b07070;
+      cursor: pointer;
+      padding: 0;
+      font-size: 16px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .error-banner-close:hover { color: var(--error); }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .btn-google {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface2);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: background 0.2s;
+      text-decoration: none;
+    }
+    .btn-google:hover { background: #252A3A; }
+
+    .link-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      padding: 0;
+      text-decoration: underline;
+      margin-top: 10px;
+      display: inline-block;
+    }
+    .link-btn:hover { color: var(--text); }
+
+    .back-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      padding: 0 0 20px 0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .back-btn:hover { color: var(--text); }
+
+    .success-msg {
+      color: #5cb85c;
+      font-size: 13px;
+      margin-top: 12px;
+      display: none;
+    }
+    .success-msg.visible { display: block; }
+  </style>
+</head>
+
+<body>
+  <a href="/" class="logo">cynda</a>
+
+  <div class="card">
+    <div class="tabs">
+      <button class="tab active" id="tab-login" onclick="switchTab('login')">Sign in</button>
+      <button class="tab" id="tab-signup" onclick="switchTab('signup')">Create account</button>
+    </div>
+
+    <!-- Login -->
+    <div class="panel active" id="panel-login">
+      <a id="btn-google-login" class="btn-google" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+        </svg>
+        Sign in with Google
+      </a>
+      <div class="divider">or</div>
+      <div class="form-group">
+        <label for="login-email">Email</label>
+        <input id="login-email" type="email" placeholder="you@company.com" autocomplete="email" />
+      </div>
+      <div class="form-group">
+        <label for="login-password">Password</label>
+        <input id="login-password" type="password" placeholder="••••••••" autocomplete="current-password" />
+      </div>
+      <button class="btn-primary" id="btn-login" onclick="submitLogin()">Sign in</button>
+      <div class="error-banner" id="login-error">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 1.5L14.5 13H1.5L8 1.5Z" stroke="#E05252" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M8 6V9" stroke="#E05252" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="8" cy="11" r="0.75" fill="#E05252"/>
+        </svg>
+        <div class="error-banner-body">
+          <span class="error-banner-title" id="login-error-title"></span>
+          <span class="error-banner-detail" id="login-error-detail"></span>
+        </div>
+        <button class="error-banner-close" onclick="dismissError('login-error')">×</button>
+      </div>
+      <button class="link-btn" onclick="showForgot()">Forgot password?</button>
+    </div>
+
+    <!-- Signup -->
+    <div class="panel" id="panel-signup">
+      <a id="btn-google-signup" class="btn-google" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+        </svg>
+        Sign up with Google
+      </a>
+      <div class="divider">or</div>
+      <div class="form-group">
+        <label for="signup-name">Name</label>
+        <input id="signup-name" type="text" placeholder="Your name" autocomplete="name" />
+      </div>
+      <div class="form-group">
+        <label for="signup-email">Email</label>
+        <input id="signup-email" type="email" placeholder="you@company.com" autocomplete="email" />
+      </div>
+      <div class="form-group">
+        <label for="signup-password">Password</label>
+        <input id="signup-password" type="password" placeholder="Min. 8 characters" autocomplete="new-password" />
+      </div>
+      <button class="btn-primary" id="btn-signup" onclick="submitSignup()">Create account</button>
+      <div class="error-banner" id="signup-error">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 1.5L14.5 13H1.5L8 1.5Z" stroke="#E05252" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M8 6V9" stroke="#E05252" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="8" cy="11" r="0.75" fill="#E05252"/>
+        </svg>
+        <div class="error-banner-body">
+          <span class="error-banner-title" id="signup-error-title"></span>
+          <span class="error-banner-detail" id="signup-error-detail"></span>
+        </div>
+        <button class="error-banner-close" onclick="dismissError('signup-error')">×</button>
+      </div>
+    </div>
+
+    <!-- Forgot password -->
+    <div class="panel" id="panel-forgot">
+      <button class="back-btn" onclick="goBack()">← Back to sign in</button>
+      <h2>Forgot your password?</h2>
+      <p class="subtitle">Enter your email and we'll send you a reset link.</p>
+      <div id="forgot-form">
+        <div class="form-group">
+          <label for="forgot-email">Email</label>
+          <input id="forgot-email" type="email" placeholder="you@company.com" autocomplete="email" />
+        </div>
+        <button class="btn-primary" id="btn-forgot" onclick="submitForgotPassword()">Send reset link</button>
+        <div class="error-banner" id="forgot-error">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 1.5L14.5 13H1.5L8 1.5Z" stroke="#E05252" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M8 6V9" stroke="#E05252" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="8" cy="11" r="0.75" fill="#E05252"/>
+          </svg>
+          <div class="error-banner-body">
+            <span class="error-banner-title" id="forgot-error-title"></span>
+            <span class="error-banner-detail" id="forgot-error-detail"></span>
+          </div>
+          <button class="error-banner-close" onclick="dismissError('forgot-error')">×</button>
+        </div>
+      </div>
+      <p class="success-msg" id="forgot-success">Check your inbox — a reset link is on its way.</p>
+    </div>
+  </div>
+
+  <script>
+    const BACKEND_URL = '__BACKEND_URL__';
+
+    function switchTab(tab) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('tab-' + tab).classList.add('active');
+      document.getElementById('panel-' + tab).classList.add('active');
+      document.querySelector('.tabs').style.display = '';
+    }
+
+    function showForgot() {
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('panel-forgot').classList.add('active');
+      document.querySelector('.tabs').style.display = 'none';
+    }
+
+    function goBack() {
+      switchTab('login');
+    }
+
+    function showError(bannerId, title, detail) {
+      const banner = document.getElementById(bannerId);
+      document.getElementById(bannerId + '-title').textContent = title;
+      document.getElementById(bannerId + '-detail').textContent = detail || '';
+      banner.classList.add('visible');
+    }
+
+    function dismissError(bannerId) {
+      document.getElementById(bannerId).classList.remove('visible');
+    }
+
+    function loginError(status, detail) {
+      if (status === 401) return showError('login-error', 'Wrong email or password', 'Double-check your credentials or use "Forgot password?" below.');
+      if (status === 429) return showError('login-error', 'Too many attempts', 'Wait a few minutes before trying again.');
+      if (status >= 500) return showError('login-error', 'Server error', 'Something went wrong on our end. Try again shortly.');
+      showError('login-error', 'Sign in failed', detail || 'Please try again.');
+    }
+
+    function signupError(status, detail) {
+      if (status === 409) return showError('signup-error', 'Email already in use', 'Try signing in instead, or reset your password.');
+      if (status === 422) return showError('signup-error', 'Invalid details', detail || 'Check your entries — password must be at least 8 characters.');
+      if (status === 429) return showError('signup-error', 'Too many attempts', 'Wait a few minutes before trying again.');
+      if (status >= 500) return showError('signup-error', 'Server error', 'Something went wrong on our end. Try again shortly.');
+      showError('signup-error', 'Sign up failed', detail || 'Please try again.');
+    }
+
+    async function submitForgotPassword() {
+      const email = document.getElementById('forgot-email').value.trim();
+      const btn = document.getElementById('btn-forgot');
+
+      dismissError('forgot-error');
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+
+      try {
+        await fetch(`${BACKEND_URL}/auth/forgot-password`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        });
+        document.getElementById('forgot-form').style.display = 'none';
+        document.getElementById('forgot-success').classList.add('visible');
+      } catch {
+        showError('forgot-error', 'Network error', 'Check your connection and try again.');
+        btn.disabled = false;
+        btn.textContent = 'Send reset link';
+      }
+    }
+
+    async function submitLogin() {
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      const btn = document.getElementById('btn-login');
+
+      dismissError('login-error');
+      btn.disabled = true;
+      btn.textContent = 'Signing in…';
+
+      try {
+        const res = await fetch(`${BACKEND_URL}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ email, password }),
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data.token) localStorage.setItem('cynda_token', data.token);
+          window.location.href = '/pages/dashboard.html';
+          return;
+        }
+
+        const data = await res.json().catch(() => ({}));
+        loginError(res.status, data.detail);
+      } catch {
+        showError('login-error', 'Network error', 'Check your connection and try again.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Sign in';
+      }
+    }
+
+    async function submitSignup() {
+      const name = document.getElementById('signup-name').value.trim();
+      const email = document.getElementById('signup-email').value.trim();
+      const password = document.getElementById('signup-password').value;
+      const btn = document.getElementById('btn-signup');
+
+      dismissError('signup-error');
+      btn.disabled = true;
+      btn.textContent = 'Creating account…';
+
+      try {
+        const ref_token = sessionStorage.getItem('cynda_ref_token') || undefined;
+        const res = await fetch(`${BACKEND_URL}/auth/signup`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ name, email, password, ref_token }),
+        });
+
+        if (res.ok) {
+          sessionStorage.removeItem('cynda_ref_token');
+          const data = await res.json();
+          if (data.token) localStorage.setItem('cynda_token', data.token);
+          window.location.href = '/pages/dashboard.html';
+          return;
+        }
+
+        const data = await res.json().catch(() => ({}));
+        signupError(res.status, data.detail);
+      } catch {
+        showError('signup-error', 'Network error', 'Check your connection and try again.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Create account';
+      }
+    }
+
+    const _googleUrl = `${BACKEND_URL}/auth/google`;
+    document.getElementById('btn-google-login').href = _googleUrl;
+    document.getElementById('btn-google-signup').href = _googleUrl;
+
+    const _ref = new URLSearchParams(window.location.search).get('ref');
+    if (_ref) sessionStorage.setItem('cynda_ref_token', _ref);
+
+    const _error = new URLSearchParams(window.location.search).get('error');
+    if (_error) {
+      const title = _error === 'google_cancelled' ? 'Sign in cancelled' : 'Google sign in failed';
+      const detail = _error === 'google_cancelled' ? 'You closed the Google sign-in window.' : 'Please try again or use email and password.';
+      showError('login-error', title, detail);
+    }
+
+    // Open the tab specified in ?tab= query param
+    const _tab = new URLSearchParams(window.location.search).get('tab');
+    if (_tab === 'signup') switchTab('signup');
+
+    // If already logged in, skip to connect
+    (async () => {
+      try {
+        const _token = localStorage.getItem('cynda_token');
+        const _headers = _token ? { Authorization: `Bearer ${_token}` } : {};
+        const res = await fetch(`${BACKEND_URL}/auth/me`, { credentials: 'include', headers: _headers });
+        if (res.ok) window.location.href = '/pages/dashboard.html';
+      } catch {}
+    })();
+
+    // Allow Enter key to submit
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter') return;
+      const activePanel = document.querySelector('.panel.active').id;
+      if (activePanel === 'panel-login') submitLogin();
+      else submitSignup();
+    });
+  </script>
+</body>
+
+</html>
